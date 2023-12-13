@@ -1,0 +1,5 @@
+export { default as Home } from './Home'
+export { default as MyPosts } from './MyPosts'
+export { default as Bookmark } from './Bookmark'
+export { default as Liked } from './Liked'
+export { default as MyAccount } from './My Account'
