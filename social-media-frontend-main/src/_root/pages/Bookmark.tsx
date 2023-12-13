@@ -9,7 +9,7 @@ const Bookmark = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/users/bookmarked");
+        const res = await axios.get("http://localhost:5000/api/users/bookmarked", {"withCredentials" : true});
         console.log(res.data);  // comment 
         setPosts(res.data)
       } catch (error) {
@@ -28,6 +28,7 @@ const Bookmark = () => {
     _id: string; userId: string; title: string; body: string; tags: string[]; likes: number; createdAt: string; updatedAt: string; }) => (
     <PostCard
         key={_id}
+        _id={_id}
         userId={userId}
         title={title}
         body={body}

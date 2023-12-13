@@ -1,5 +1,6 @@
 
 import { Bookmark, Home, Liked, MyPosts, MyAccount } from './pages';
+import Create from './pages/Create';
   
 const user = true
   export default {
@@ -11,6 +12,12 @@ const user = true
           name: 'Home',
           icon: "assets/icons/home.svg",
           component: <Home/> 
+        },
+        {
+          path: '/create',
+          name: 'Create Posts',
+          icon: "assets/icons/home.svg",
+          component: <Create/> 
         },
         {
           path: '/likes',

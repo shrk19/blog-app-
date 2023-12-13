@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import PostCard from "../components/PostCard"
 import axios from "axios"
 
+
 const Home = () => {
   const [posts, setPosts] = useState([]);
 
@@ -17,16 +18,17 @@ const Home = () => {
     };
     fetchPosts();
   }, []);
-  
-
+ 
   console.log("Posts:", posts); // comment 
 
   return (
     <div>
+      
     {posts.map(({_id, userId, title, body, tags, likes, createdAt, updatedAt }: {  
     _id: string; userId: string; title: string; body: string; tags: string[]; likes: number; createdAt: string; updatedAt: string; }) => (
     <PostCard
         key={_id}
+        _id={_id}
         userId={userId}
         title={title}
         body={body}
@@ -40,3 +42,5 @@ const Home = () => {
 }
 
 export default Home
+
+

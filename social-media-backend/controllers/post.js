@@ -138,6 +138,7 @@ export const likePost = async (req, res, next) => {
                 $in: [postId] //  post ID you want to check
             }
         })
+        console.log(found)
 
         if(found.length === 0){
             let user = await User.findByIdAndUpdate(

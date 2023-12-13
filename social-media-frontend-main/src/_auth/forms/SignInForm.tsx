@@ -19,7 +19,7 @@ const SignInForm = () => {
   const onFinish = async (values: any) => {
     console.log('Success:', values);
     try{
-      const response = await axios.post('http://localhost:5000/api/auth/signin', values);
+      const response = await axios.post('http://localhost:5000/api/auth/signin', values, {"withCredentials" : true} );
       console.log(response.data) // comment 
       setError(false)
       navigate("/")

@@ -11,11 +11,11 @@ router.delete('/:id', verifyToken, deleteUser)
 // get a user 
 router.get('/find/:id', findUser)
 
-// as a user we can create posts 
+// as a user we can get my create posts 
 router.get('/myposts', verifyToken, getMyPosts)
-// as a user we can like posts 
+// as a user we can get my liked posts 
 router.get('/liked', verifyToken, getLikedPost)
-// as a user we can bookmark posts 
+// as a user we can get my bookmarked posts 
 router.get('/bookmarked', verifyToken, getBookmarkedPost)
 
 

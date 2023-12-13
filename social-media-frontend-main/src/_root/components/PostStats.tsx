@@ -1,15 +1,20 @@
+import axios from "axios";
 import { useState } from "react";
 
-const PostStats = (props: { likes: number  }) => {
+const PostStats = (props: { likes: number; _id: string }) => {
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    
-      
-        
 
-    const handleLike = () => {
-      setLiked(!liked); // Toggle the liked state
+
+    
+    const handleLike = async () => {
+      try{
+        await axios.put(`http://localhost:5000/api/posts/like/${props._id}`, null, {"withCredentials" : true})
+        setLiked(!liked); // Toggle the liked state
+      }catch(err){
+        console.log(err)
+      }
     };
     const handleSave = () => {
         setSaved(!saved); // Toggle the saved state

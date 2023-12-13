@@ -4,6 +4,9 @@ import { PageContainer, ProLayout } from '@ant-design/pro-components';
 import { useState } from 'react';
 import defaultProps from './_defaultProps';
 import { Home } from './pages';
+import { Input } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+import Create from './pages/Create';
 
 
 const RootLayout = () => {
@@ -12,6 +15,17 @@ const RootLayout = () => {
   // });
   const [pathname, setPathname] = useState('/');
   const [page, setPage] = useState(<Home/>);
+
+  const suffix = (
+    <EditOutlined className="text-primary-1 text-2xl"
+    />
+  );
+
+  const handleCreatePostClick = () => {
+    // Update state to navigate to the "Create Posts" page
+    setPathname('/create'); // Set the pathname to '/create'
+    setPage(<Create />); // Set the page to the Create component
+  };
 
   return (
     
@@ -44,7 +58,7 @@ const RootLayout = () => {
         )}
       >
         <PageContainer 
-        content={page}
+        
         >
           <div
             style={{
@@ -54,6 +68,13 @@ const RootLayout = () => {
             }}
           >
           {/* Here goes the component */}
+          { pathname==="/" &&  <Input
+            placeholder="Create post"
+            size="large"
+            suffix={suffix}
+            onClick={handleCreatePostClick}
+          />}
+          {page}
           
           
           </div>

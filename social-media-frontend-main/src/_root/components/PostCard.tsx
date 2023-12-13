@@ -2,7 +2,7 @@ import { ProCard } from "@ant-design/pro-components"
 import PostStats from "./PostStats"
 
 const PostCard = (props: {  
-    key: string;
+    _id: string;
     userId: string;
     title: string;
     body: string;
@@ -10,8 +10,10 @@ const PostCard = (props: {
     likes: number;
     createdAt: string;
     updatedAt: string; }) => {
+
+     
   return (
-    <ProCard className="post-card m-4">
+    <ProCard className="post-card md:m-4">
         <div className="flex justify-between">
             <div className="flex items-center gap-3">
                 <img 
@@ -44,7 +46,7 @@ const PostCard = (props: {
                 </li>
             </ul>
         
-        <PostStats likes={props.likes}/>
+        <PostStats _id={props._id} likes={props.likes} />
     </ProCard>
   )
 }
