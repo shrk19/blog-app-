@@ -8,8 +8,6 @@ import commentRoutes from './routes/comment.js'
 import authRoutes from './routes/auth.js'
 import cors from 'cors'
 
-
-
 const app = express()
 app.use(cors({origin:"http://localhost:5173", credentials:true}))
 dotenv.config() 

@@ -19,7 +19,7 @@ const AuthLayout = () => {
         
         
       </section>
-      <div className='hidden xl:block h-screen w-1/2 bg-primary-1 '>  </div>
+      <div className='hidden xl:block h-screen w-1/2 bg-gradient-to-r from-[#5D5FEF] to-[#D0DFFF]  '>  </div>
       
     </>)}
     </>

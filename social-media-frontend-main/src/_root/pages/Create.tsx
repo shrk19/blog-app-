@@ -1,5 +1,7 @@
 import { Input, Button, Form, notification} from 'antd';
 import axios from 'axios';
+import { useContext } from 'react';
+import { PostContext } from '../context/PostContext';
 
 const { TextArea } = Input;
 
@@ -18,6 +20,7 @@ const Create = () => {
     //     console.log('Change:', e.target.value);
     // };
 
+    const {fetchPosts} = useContext(PostContext)
     const [api, contextHolder] = notification.useNotification();
 
     const openNotificationWithIcon = (type: NotificationType) => {
@@ -27,12 +30,14 @@ const Create = () => {
     };
 
     const onFinish = async (values: any) => {
-        console.log('Success:', values);
+        //console.log('Success:', values);
         try{
-            const response = await axios.post('http://localhost:5000/api/posts/create', values, {"withCredentials" : true} );
-            console.log(response.data)
+            await axios.post('http://localhost:5000/api/posts/create', values, {"withCredentials" : true} );
+            //console.log(response.data) //comment
             openNotificationWithIcon('success')
             onReset();
+            fetchPosts()
+            
         }catch(err){
           console.log(err)
         }
@@ -46,8 +51,7 @@ const Create = () => {
         form.resetFields();
     };
 
-    
-      
+
   return (
     <div className='flex flex-col w-full md:w-3/4'>
         {contextHolder}

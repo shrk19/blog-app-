@@ -1,16 +1,20 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import { UserContext } from "../context/UserContext";
 
 const MyPosts = () => {
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([])
+  const {user} = useContext(UserContext)
+  const savedPostsByCurrentUser = user?.bookmarkedPosts || [] as string[];
+  const likedPostsByCurrentUser = user?.likedPosts || [] as string[];
   
     useEffect(() => {
       const fetchPosts = async () => {
         try {
           const res = await axios.get("http://localhost:5000/api/users/myposts", {"withCredentials" : true});
-          console.log(res.data);  // comment 
+          //console.log(res.data);  // comment 
           setPosts(res.data)
         } catch (error) {
           console.error("Error fetching posts:", error);
@@ -20,21 +24,26 @@ const MyPosts = () => {
     }, []);
     
   
-    console.log("My Posts:", posts); // comment 
+    //console.log("My Posts:", posts); // comment 
 
   return (
     <div>
-      {posts.map(({_id, userId, title, body, tags, likes, createdAt, updatedAt }: {  
-      _id: string; userId: string; title: string; body: string; tags: string[]; likes: number; createdAt: string; updatedAt: string; }) => (
-      <PostCard
-          key={_id}
-          userId={userId}
-          title={title}
-          body={body}
-          tags={tags}
-          likes={likes}
-          createdAt={createdAt} updatedAt={updatedAt}    />
-    ))}
+      {posts?.map(({_id, userId, username, title, body, tags, likes, createdAt, updatedAt }: {  
+    _id: string; userId: string; username: string; title: string; body: string; tags: string[]; likes: number; createdAt: string; updatedAt: string; }) => (
+    
+    <PostCard
+        key={_id}
+        _id={_id}
+        userId={userId}
+        username={username}
+        title={title}
+        body={body}
+        tags={tags}
+        likes={likes}
+        isLiked = {likedPostsByCurrentUser.includes(_id) ? true : false}
+        isSaved = {savedPostsByCurrentUser.includes(_id) ? true : false}
+        createdAt={createdAt} updatedAt={updatedAt}    />
+  ))}
 
     </div>
   )

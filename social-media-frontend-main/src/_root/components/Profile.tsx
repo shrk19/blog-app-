@@ -6,9 +6,7 @@ import { UserContext } from "../context/UserContext"
 import { Card, Col, Row } from 'antd';
 
 const Profile = () => {
-  const {user} = useContext(UserContext)
-  const {setUser} = useContext(UserContext)
-  
+  const {user, setUser} = useContext(UserContext)
   const navigate = useNavigate();
   
   const handleLogout = async () => {

@@ -7,10 +7,13 @@ import './index.css'
 import RootLayout from './_root/RootLayout'
 import { ConfigProvider } from 'antd'
 import { UserContextProvider } from './_root/context/UserContext'
+import { PostContextProvider } from './_root/context/PostContext'
+
 
 function App() {
   return (
     <UserContextProvider>
+    <PostContextProvider>
 
     
     <ConfigProvider
@@ -43,6 +46,8 @@ function App() {
     </main>
     </ConfigProvider>
 
+
+    </PostContextProvider>
     </UserContextProvider>
   )
 }

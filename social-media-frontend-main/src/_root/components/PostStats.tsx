@@ -7,8 +7,7 @@ type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSaved: boolean }) => {
 
-    const {user} = useContext(UserContext)
-    
+    const {user, setUser} = useContext(UserContext)
 
     const [liked, setLiked] = useState(props.isLiked);
     const [saved, setSaved] = useState(props.isSaved);
@@ -35,13 +34,17 @@ const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSave
         if(res.status === 200){
           setLiked(!liked);
           setLikes(liked ? likes - 1 : likes + 1);
+
+          // update user context
+          const updatedUser = await axios.get(`http://localhost:5000/api/users/find/${user._id}`)
+          setUser(updatedUser.data)
         }
-         // Toggle the liked state
       }catch(err){
         console.log(err)
       }
     };
     const handleSave = async () => {
+      try {
         if(user===null){
           msg = 'Sign in to save posts!'
           openNotificationWithIcon('error')
@@ -52,7 +55,14 @@ const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSave
           setSaved(!saved); // Toggle the saved state
           msg = !saved ? 'Post Bookmarked' : 'Post removed from bookmarks'
           openNotificationWithIcon('success')
+
+          // update user context
+          const updatedUser = await axios.get(`http://localhost:5000/api/users/find/${user._id}`)
+          setUser(updatedUser.data)
         }
+      } catch (error) {
+        console.log(error)
+      }
     };
     
   return (

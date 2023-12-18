@@ -3,13 +3,16 @@ import PostStats from "./PostStats"
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
-import { notification } from "antd";
+import { Popconfirm, notification } from "antd";
+import { PostContext } from "../context/PostContext";
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const PostCard = (props: {  
     _id: string;
     userId: string;
+    username: string;
     title: string;
     body: string;
     tags: string[];
@@ -19,6 +22,8 @@ const PostCard = (props: {
     createdAt: string;
     updatedAt: string; }) => {
 
+    const {posts, setPosts} = useContext(PostContext)
+
     const [api, contextHolder] = notification.useNotification();
     let msg = ''
     const openNotificationWithIcon = (type: NotificationType) => {
@@ -27,27 +32,36 @@ const PostCard = (props: {
         });
     };
 
-
     const handleEdit = () =>{
        console.log('edit functionality yet to be built')
     }
-    const handleDelete = async () => {
+    const handleDelete = async (postId : String) => {
         try {
-          const res = await axios.delete(`http://localhost:5000/api/posts/${props._id}`, {"withCredentials": true });
+          const res = await axios.delete(`http://localhost:5000/api/posts/${postId}`, {"withCredentials": true });
           if(res.status === 200){
             msg = 'Post deleted successfully'
             openNotificationWithIcon('success')
+            setPosts(posts.filter(post => post._id !== postId));
           }else{
             msg = 'Error'
             openNotificationWithIcon('error')
           }
-            
         } catch (error) {
             console.log(error)
         }
-
     }
+
+    const handleConfirm = async () => {
+        try {
+          // Perform the deletion action here
+          await handleDelete(props._id);
+        } catch (error) {
+          console.error(error);
+        }
+      };
      
+  
+
     const {user} = useContext(UserContext)
   return (
     <ProCard className="post-card m-2 md:m-4" key={props._id}>
@@ -60,7 +74,7 @@ const PostCard = (props: {
                 className="rounded-full w-10 lg:h-10"
                 />
                 <div className="flex flex-col">
-                    <p className="small-medium lg:base-medium text-dark-4">{props.userId}</p>
+                    <p className="small-medium lg:base-medium text-dark-4">@{props.username}</p>
                     <div className="flex flex-start gap-2 text-light-3">
                         <p className="subtle-semibold lg:small-regular">
                           {props.createdAt} 
@@ -70,7 +84,16 @@ const PostCard = (props: {
             </div>
             <div className="flex flex-row">
                 {user?._id === props.userId && <img src="/assets/icons/edit.svg" alt="edit" width={20} height={20} className="cursor-pointer ml-4" onClick={() => handleEdit()}/>}
-                {user?._id === props.userId && <img src="/assets/icons/delete.svg" alt="edit" width={20} height={20} className="cursor-pointer ml-4" onClick={() => handleDelete()}/>}
+                <Popconfirm 
+                    title="Delete"
+                    description="Are you sure to delete this post?"
+                    onConfirm={handleConfirm}
+                    okText="Yes"
+                    cancelText="No"
+                    okType="danger"
+                    icon={<QuestionCircleOutlined style={{ color: 'red' }} />}>
+                        {user?._id === props.userId && <img src="/assets/icons/delete.svg" alt="edit" width={20} height={20} className="cursor-pointer ml-4" />}
+                </Popconfirm>
             </div>
         </div>
 

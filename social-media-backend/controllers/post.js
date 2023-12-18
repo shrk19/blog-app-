@@ -5,7 +5,7 @@ import { createError } from "../error.js"
 
 export const addPost = async (req, res, next) => {
     try{
-        const newPost = new Post({userId : req.user._id, ...req.body}) 
+        const newPost = new Post({userId : req.user._id, username: req.user.username, ...req.body}) 
         const savedPost = await newPost.save()
         let updatedUser = await User.findByIdAndUpdate(
             req.user._id, 
@@ -16,6 +16,8 @@ export const addPost = async (req, res, next) => {
                 new : true
             }
         )
+        console.log(req.user._id)
+        console.log(updatedUser)
         res.status(200).json(updatedUser)
     }catch(err){
         next(err)
@@ -57,6 +59,19 @@ export const deletePost = async (req, res, next) => {
                 }
             )
             await Post.findByIdAndDelete(req.params.id)
+
+            // Remove post from users' likedPosts
+            await User.updateMany(
+                { likedPosts: req.params.id },
+                { $pull: { likedPosts: req.params.id } }
+            );
+
+            // Remove post from users' bookmarkedPosts
+            await User.updateMany(
+                { bookmarkedPosts: req.params.id },
+                { $pull: { bookmarkedPosts: req.params.id } }
+            );
+
             res.status(200).json("Post has been deleted")
         }else{
             next(createError(401, "You can only delete your own post"))
@@ -81,7 +96,7 @@ export const getAllPosts = async (req, res, next) => {
         const posts = await Post.find().populate("userId");;
         if(!posts) return next(createError(404, "No posts here! Maybe you should create the first post."))
         //const populatedPosts = posts.populate("userId");
-        console.log(posts)
+        //console.log(posts)
         res.status(200).json(posts)
     }catch(err){
         next(err)

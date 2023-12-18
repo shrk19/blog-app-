@@ -50,6 +50,8 @@ export const refetch = async (req, res, next) => {
         const token = req.cookies.access_token // our cookie is named access_token 
         jwt.verify(token, process.env.JWT, {}, async(err, data) => {
             if(err) return res.status(404).json(err)
+            data = await User.findById(data._id)
+            console.log(data)
             res.status(200).json(data)
         })
         
