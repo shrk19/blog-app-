@@ -1,10 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
+import { UserContext } from "../context/UserContext";
 
 const Liked = () => {
    
     const [posts, setPosts] = useState([]);
+    const {user} = useContext(UserContext)
+    const likedPostsByCurrentUser = user?.likedPosts || [] as string[];
+    const savedPostsByCurrentUser = user?.bookmarkedPosts || [] as string[];
   
     useEffect(() => {
       const fetchPosts = async () => {
@@ -26,15 +30,17 @@ const Liked = () => {
     <div>
       {posts.map(({_id, userId, title, body, tags, likes, createdAt, updatedAt }: {  
       _id: string; userId: string; title: string; body: string; tags: string[]; likes: number; createdAt: string; updatedAt: string; }) => (
-      <PostCard
-          key={_id}
-          _id={_id}
-          userId={userId}
-          title={title}
-          body={body}
-          tags={tags}
-          likes={likes}
-          createdAt={createdAt} updatedAt={updatedAt}    />
+        <PostCard
+        key={_id}
+        _id={_id}
+        userId={userId}
+        title={title}
+        body={body}
+        tags={tags}
+        likes={likes}
+        isLiked = {likedPostsByCurrentUser.includes(_id) ? true : false}
+        isSaved = {savedPostsByCurrentUser.includes(_id) ? true : false}
+        createdAt={createdAt} updatedAt={updatedAt}    />
     ))}
     </div>
   )

@@ -5,10 +5,10 @@ import { createError } from "../error.js"
 
 export const addPost = async (req, res, next) => {
     try{
-        const newPost = new Post({userId : req.user.id, ...req.body}) 
+        const newPost = new Post({userId : req.user._id, ...req.body}) 
         const savedPost = await newPost.save()
         let updatedUser = await User.findByIdAndUpdate(
-            req.user.id, 
+            req.user._id, 
             {
                 $push : { createdPosts : savedPost}
             },
@@ -25,7 +25,7 @@ export const editPost = async (req, res, next) => {
     try{
         const post = await Post.findById(req.params.id)
         if(!post) return next(createError(404, "Post not found"))
-        if(req.user.id === post.userId){
+        if(req.user._id === post.userId){
             const updatedPost = await Post.findByIdAndUpdate(
                 req.params.id, {
                     $set : req.body
@@ -44,11 +44,11 @@ export const deletePost = async (req, res, next) => {
     try{
         const post = await Post.findById(req.params.id)
         if(!post) return next(createError(404, "Post doesnt exist"))
-        if(req.user.id === post.userId){
+        if(req.user._id === post.userId){
             console.log("You can delete")
             // first delete post from user's created list 
             let updatedUser = await User.findByIdAndUpdate(
-                req.user.id, 
+                req.user._id, 
                 {
                     $pull : { createdPosts : post._id}
                 },
@@ -91,7 +91,7 @@ export const getAllPosts = async (req, res, next) => {
 export const bookmarkPost = async (req, res, next) => {
     try{
         const postId = req.params.id
-        const userId = req.user.id
+        const userId = req.user._id
         
         const found = await User.find({_id : userId,  
             bookmarkedPosts: {
@@ -131,7 +131,7 @@ export const bookmarkPost = async (req, res, next) => {
 export const likePost = async (req, res, next) => {
     try{
         const postId = req.params.id
-        const userId = req.user.id
+        const userId = req.user._id
         
         const found = await User.find({_id : userId,  
             likedPosts: {

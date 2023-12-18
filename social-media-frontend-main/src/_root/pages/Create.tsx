@@ -1,4 +1,4 @@
-import { Input, Button, Form } from 'antd';
+import { Input, Button, Form, notification} from 'antd';
 import axios from 'axios';
 
 const { TextArea } = Input;
@@ -9,6 +9,8 @@ type FieldType = {
     tags?: string;
 };
 
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
 const Create = () => {
     const [form] = Form.useForm();
 
@@ -16,11 +18,20 @@ const Create = () => {
     //     console.log('Change:', e.target.value);
     // };
 
+    const [api, contextHolder] = notification.useNotification();
+
+    const openNotificationWithIcon = (type: NotificationType) => {
+      api[type]({
+        message: 'Post created',
+      });
+    };
+
     const onFinish = async (values: any) => {
         console.log('Success:', values);
         try{
             const response = await axios.post('http://localhost:5000/api/posts/create', values, {"withCredentials" : true} );
             console.log(response.data)
+            openNotificationWithIcon('success')
             onReset();
         }catch(err){
           console.log(err)
@@ -39,6 +50,7 @@ const Create = () => {
       
   return (
     <div className='flex flex-col w-full md:w-3/4'>
+        {contextHolder}
     <Form
     id='create-post'
     name="basic"

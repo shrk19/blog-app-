@@ -6,9 +6,13 @@ import { Home } from './_root/pages'
 import './index.css'
 import RootLayout from './_root/RootLayout'
 import { ConfigProvider } from 'antd'
+import { UserContextProvider } from './_root/context/UserContext'
 
 function App() {
   return (
+    <UserContextProvider>
+
+    
     <ConfigProvider
       theme={{
         token: {
@@ -38,6 +42,8 @@ function App() {
       </Routes>
     </main>
     </ConfigProvider>
+
+    </UserContextProvider>
   )
 }
 

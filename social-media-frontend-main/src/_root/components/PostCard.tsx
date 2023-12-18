@@ -1,5 +1,11 @@
 import { ProCard } from "@ant-design/pro-components"
 import PostStats from "./PostStats"
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
+import { notification } from "antd";
+
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const PostCard = (props: {  
     _id: string;
@@ -8,12 +14,44 @@ const PostCard = (props: {
     body: string;
     tags: string[];
     likes: number;
+    isLiked: boolean;
+    isSaved: boolean;
     createdAt: string;
     updatedAt: string; }) => {
 
+    const [api, contextHolder] = notification.useNotification();
+    let msg = ''
+    const openNotificationWithIcon = (type: NotificationType) => {
+        api[type]({
+        message: msg,
+        });
+    };
+
+
+    const handleEdit = () =>{
+       console.log('edit functionality yet to be built')
+    }
+    const handleDelete = async () => {
+        try {
+          const res = await axios.delete(`http://localhost:5000/api/posts/${props._id}`, {"withCredentials": true });
+          if(res.status === 200){
+            msg = 'Post deleted successfully'
+            openNotificationWithIcon('success')
+          }else{
+            msg = 'Error'
+            openNotificationWithIcon('error')
+          }
+            
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
      
+    const {user} = useContext(UserContext)
   return (
-    <ProCard className="post-card md:m-4">
+    <ProCard className="post-card m-2 md:m-4" key={props._id}>
+        {contextHolder}
         <div className="flex justify-between">
             <div className="flex items-center gap-3">
                 <img 
@@ -30,7 +68,10 @@ const PostCard = (props: {
                     </div>
                 </div>
             </div>
-            <img src="/assets/icons/edit.svg" alt="edit" width={20} height={20} className="cursor-pointer"/>
+            <div className="flex flex-row">
+                {user?._id === props.userId && <img src="/assets/icons/edit.svg" alt="edit" width={20} height={20} className="cursor-pointer ml-4" onClick={() => handleEdit()}/>}
+                {user?._id === props.userId && <img src="/assets/icons/delete.svg" alt="edit" width={20} height={20} className="cursor-pointer ml-4" onClick={() => handleDelete()}/>}
+            </div>
         </div>
 
        
@@ -46,7 +87,7 @@ const PostCard = (props: {
                 </li>
             </ul>
         
-        <PostStats _id={props._id} likes={props.likes} />
+        <PostStats _id={props._id} likes={props.likes} isLiked={props.isLiked} isSaved={props.isSaved} />
     </ProCard>
   )
 }

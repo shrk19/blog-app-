@@ -20,7 +20,7 @@ const SignUpForm = () => {
     try{
       const response = await axios.post('http://localhost:5000/api/auth/signup', values);
       console.log(response.data)
-      navigate("/")
+      navigate("/signin")
     }catch(err){
       console.log(err)
     }

@@ -24,7 +24,7 @@ export const signin = async (req, res, next) => {
         const isCorrect = user.password === req.body.password
         if(!isCorrect) return next(createError(404, "Incorrect Password"))
 
-        const token = jwt.sign({id:user._id}, process.env.JWT, {expiresIn:"259200000"})
+        const token = jwt.sign({_id:user._id, username: user.username, email:user.email, createdPosts:user.createdPosts, likedPosts: user.likedPosts, bookmarkedPosts: user.bookmarkedPosts}, process.env.JWT, {expiresIn:"259200000"})
         res.cookie("access_token", token, {
             httpOnly: true, 
             withCredentials: true
@@ -43,3 +43,22 @@ export const logout = async (req, res, next) => {
         next(err)
     }
 }
+
+export const refetch = async (req, res, next) => {
+    console.log("refetch")
+    try{
+        const token = req.cookies.access_token // our cookie is named access_token 
+        jwt.verify(token, process.env.JWT, {}, async(err, data) => {
+            if(err) return res.status(404).json(err)
+            res.status(200).json(data)
+        })
+        
+        console.log(token)
+        console.log("reftech")
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+

@@ -1,7 +1,8 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../_root/context/UserContext';
 
 
 type FieldType = {
@@ -11,8 +12,11 @@ type FieldType = {
 };
   
 
+
 const SignInForm = () => {
 
+  const {setUser} = useContext(UserContext)
+  
   const [error, setError] = useState(false)
   const navigate = useNavigate();
 
@@ -21,6 +25,9 @@ const SignInForm = () => {
     try{
       const response = await axios.post('http://localhost:5000/api/auth/signin', values, {"withCredentials" : true} );
       console.log(response.data) // comment 
+      //
+      setUser(response.data)
+      
       setError(false)
       navigate("/")
     }catch(err){

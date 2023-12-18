@@ -3,7 +3,7 @@ import User from "../models/User.js"
 import Post from "../models/Post.js"
 
 export const updateUser = async (req, res, next) => {
-    if(req.params.id === req.user.id){
+    if(req.params.id === req.user._id){
         try{
             const updatedUser = await User.findByIdAndUpdate(
                 req.params.id, {
@@ -20,7 +20,7 @@ export const updateUser = async (req, res, next) => {
     }
 }
 export const deleteUser = async (req, res, next) => {
-    if(req.params.id === req.user.id){
+    if(req.params.id === req.user._id){
         try{
             {
                 await User.findByIdAndDelete(req.params.id)
@@ -44,7 +44,7 @@ export const findUser = async (req, res, next) => {
 }
 export const getLikedPost = async (req, res, next) => {
     try{
-        const user = await User.findById(req.user.id)
+        const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your liked Posts"))
 
         const likedPosts = user.likedPosts
@@ -57,7 +57,7 @@ export const getLikedPost = async (req, res, next) => {
 }
 export const getMyPosts = async (req, res, next) => {
     try{
-        const user = await User.findById(req.user.id)
+        const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your Posts"))
 
         const myPosts = user.createdPosts
@@ -70,7 +70,7 @@ export const getMyPosts = async (req, res, next) => {
 }
 export const getBookmarkedPost = async (req, res, next) => {
     try{
-        const user = await User.findById(req.user.id)
+        const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your bookmarked Posts"))
 
         const bookmarkedPosts = user.bookmarkedPosts

@@ -1,27 +1,63 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { notification } from 'antd';
+import { UserContext } from "../context/UserContext";
 
-const PostStats = (props: { likes: number; _id: string }) => {
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-    const [liked, setLiked] = useState(false);
-    const [saved, setSaved] = useState(false);
+const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSaved: boolean }) => {
 
+    const {user} = useContext(UserContext)
+    
 
+    const [liked, setLiked] = useState(props.isLiked);
+    const [saved, setSaved] = useState(props.isSaved);
+    const [likes, setLikes] = useState(props.likes);
+
+    const [api, contextHolder] = notification.useNotification();
+
+    let msg = ''
+
+    const openNotificationWithIcon = (type: NotificationType) => {
+      api[type]({
+        message: msg,
+      });
+    };
     
     const handleLike = async () => {
       try{
-        await axios.put(`http://localhost:5000/api/posts/like/${props._id}`, null, {"withCredentials" : true})
-        setLiked(!liked); // Toggle the liked state
+        if(user===null){
+          msg = 'Sign in to like posts!'
+          openNotificationWithIcon('error')
+          return
+        }
+        const res = await axios.put(`http://localhost:5000/api/posts/like/${props._id}`, null, {"withCredentials" : true})
+        if(res.status === 200){
+          setLiked(!liked);
+          setLikes(liked ? likes - 1 : likes + 1);
+        }
+         // Toggle the liked state
       }catch(err){
         console.log(err)
       }
     };
-    const handleSave = () => {
-        setSaved(!saved); // Toggle the saved state
+    const handleSave = async () => {
+        if(user===null){
+          msg = 'Sign in to save posts!'
+          openNotificationWithIcon('error')
+          return
+        }
+        const res = await axios.put(`http://localhost:5000/api/posts/bookmark/${props._id}`, null, {"withCredentials" : true})
+        if(res.status === 200){
+          setSaved(!saved); // Toggle the saved state
+          msg = !saved ? 'Post Bookmarked' : 'Post removed from bookmarks'
+          openNotificationWithIcon('success')
+        }
     };
     
   return (
-    <div className="flex justify-between items-center py-3">
+    <div className="flex justify-between items-center py-3" key={props._id}>
+      {contextHolder}
       <div className="flex gap-2 mr-5">
         <img 
         src={liked ? '/assets/icons/liked.svg' : '/assets/icons/like.svg'}
@@ -31,7 +67,7 @@ const PostStats = (props: { likes: number; _id: string }) => {
         height={20}
         className="cursor-pointer"
         />
-        <p className="small-medium lg:base-medium">{props.likes}</p>
+        <p className="small-medium lg:base-medium">{likes}</p>
       </div>
 
       <div className="flex">
