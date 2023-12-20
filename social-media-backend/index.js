@@ -39,11 +39,9 @@ app.use((err, req, res, next) => {
     })
 })
 
-connectDB();
+app.listen('https://blog-app-api-rose.vercel.app', ()=>{
+    connectDB();
+    console.log("server running");
+})
 
-// app.listen(5000, ()=>{
-//     connectDB();
-//     console.log("server running on port 5000");
-// })
 
-module.exports = app;
