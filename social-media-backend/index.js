@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: 'https://blog-app-client-inky.vercel.app', // Replace with your frontend's URL
+  origin: 'https://social-media-client-pp5p.onrender.com', // Replace with your frontend's URL
   credentials: true, // Enable passing cookies, authorization headers, etc.
 }));
 
