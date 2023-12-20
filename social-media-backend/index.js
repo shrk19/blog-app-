@@ -39,8 +39,11 @@ app.use((err, req, res, next) => {
     })
 })
 
+connectDB();
 
-app.listen(5000, ()=>{
-    connectDB();
-    console.log("server running on port 5000");
-})
+// app.listen(5000, ()=>{
+//     connectDB();
+//     console.log("server running on port 5000");
+// })
+
+module.exports = app;
