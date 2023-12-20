@@ -11,7 +11,10 @@ var cors = require("cors");
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://blog-app-client-inky.vercel.app', // Replace with your frontend's URL
+  credentials: true, // Enable passing cookies, authorization headers, etc.
+}));
 
 app.use(express.json()); // for the app to parse json files
 app.use(cookieParser());
