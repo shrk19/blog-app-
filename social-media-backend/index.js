@@ -43,10 +43,10 @@ app.use("/api/comments", commentRoutes);
 //     })
 // })
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   connectDB();
   console.log("server running");
 });
 
-export default app;
+

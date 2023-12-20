@@ -1,9 +1,12 @@
-import Post from "../models/Post.js"
-import User from "../models/User.js"
-import { createError } from "../error.js"
+var Post = require("../models/Post.js");
+var User = require("../models/User.js");
+var error = require("../error.js");
+
+var createError = error.createError;
 
 
-export const addPost = async (req, res, next) => {
+
+module.exports.addPost = async (req, res, next) => {
     try{
         const newPost = new Post({userId : req.user._id, username: req.user.username, ...req.body}) 
         const savedPost = await newPost.save()
@@ -23,7 +26,7 @@ export const addPost = async (req, res, next) => {
         next(err)
     }
 }
-export const editPost = async (req, res, next) => {
+module.exports.editPost = async (req, res, next) => {
     try{
         const post = await Post.findById(req.params.id)
         if(!post) return next(createError(404, "Post not found"))
@@ -42,7 +45,7 @@ export const editPost = async (req, res, next) => {
         next(err)
     }
 }
-export const deletePost = async (req, res, next) => {
+module.exports.deletePost = async (req, res, next) => {
     try{
         const post = await Post.findById(req.params.id)
         if(!post) return next(createError(404, "Post doesnt exist"))
@@ -81,7 +84,7 @@ export const deletePost = async (req, res, next) => {
         next(err)
     }
 }
-export const getPost = async (req, res, next) => {
+module.exports.getPost = async (req, res, next) => {
     try{
         const post = await Post.findById(req.params.id)
         if(!post) return next(createError(404, "Post doesnt exist"))
@@ -91,7 +94,7 @@ export const getPost = async (req, res, next) => {
     }
 }
 
-export const getAllPosts = async (req, res, next) => {
+module.exports.getAllPosts = async (req, res, next) => {
     try{
         const posts = await Post.find().populate("userId");;
         if(!posts) return next(createError(404, "No posts here! Maybe you should create the first post."))
@@ -103,7 +106,7 @@ export const getAllPosts = async (req, res, next) => {
     }
 }
 
-export const bookmarkPost = async (req, res, next) => {
+module.exports.bookmarkPost = async (req, res, next) => {
     try{
         const postId = req.params.id
         const userId = req.user._id
@@ -143,7 +146,7 @@ export const bookmarkPost = async (req, res, next) => {
     }
 }
 
-export const likePost = async (req, res, next) => {
+module.exports.likePost = async (req, res, next) => {
     try{
         const postId = req.params.id
         const userId = req.user._id

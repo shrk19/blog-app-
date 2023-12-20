@@ -1,22 +1,14 @@
-import express from 'express'
-import { updateUser, deleteUser, findUser, getLikedPost, getMyPosts, getBookmarkedPost } from '../controllers/user.js'
-import { verifyToken } from '../verifyToken.js';
+var express = require('express');
+var userControllers = require('../controllers/user.js');
+var verifyToken = require('../verifyToken.js').verifyToken;
 
-const router = express.Router();
+var router = express.Router();
 
-// update user - if token access token of the user is verified then he can update his acc 
-router.put('/:id', verifyToken, updateUser)
-// delete user 
-router.delete('/:id', verifyToken, deleteUser)
-// get a user 
-router.get('/find/:id', findUser)
+router.put('/:id', verifyToken, userControllers.updateUser);
+router.delete('/:id', verifyToken, userControllers.deleteUser);
+router.get('/find/:id', userControllers.findUser);
+router.get('/myposts', verifyToken, userControllers.getMyPosts);
+router.get('/liked', verifyToken, userControllers.getLikedPost);
+router.get('/bookmarked', verifyToken, userControllers.getBookmarkedPost);
 
-// as a user we can get my create posts 
-router.get('/myposts', verifyToken, getMyPosts)
-// as a user we can get my liked posts 
-router.get('/liked', verifyToken, getLikedPost)
-// as a user we can get my bookmarked posts 
-router.get('/bookmarked', verifyToken, getBookmarkedPost)
-
-
-export default router;
+module.exports = router;

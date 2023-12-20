@@ -1,9 +1,12 @@
-import mongoose from "mongoose";
-import jwt from 'jsonwebtoken'
-import User from "../models/User.js";
-import { createError } from "../error.js";
+var mongoose = require("mongoose");
+var jwt = require('jsonwebtoken');
+var User = require("../models/User.js");
+var error = require("../error.js");
 
-export const signup = async (req, res, next) => {
+var createError = error.createError;
+
+
+module.exports.signup = async (req, res, next) => {
     try{
         const {username, email, password} = req.body;
         const newUser = new User({username, email, password});
@@ -15,7 +18,7 @@ export const signup = async (req, res, next) => {
     }
 }
 
-export const signin = async (req, res, next) => {
+module.exports.signin = async (req, res, next) => {
     try{
         const user = await User.findOne({username : req.body.username});
         if(!user) return next(createError(404, "Username not found"))
@@ -36,7 +39,7 @@ export const signin = async (req, res, next) => {
     }
 }
 
-export const logout = async (req, res, next) => {
+module.exports.logout = async (req, res, next) => {
     try{
         res.clearCookie("access_token", {sameSite:"none", secure:true}).status(200).send("logged out")
     }catch(err){
@@ -44,7 +47,7 @@ export const logout = async (req, res, next) => {
     }
 }
 
-export const refetch = async (req, res, next) => {
+module.exports.refetch = async (req, res, next) => {
     console.log("refetch")
     try{
         const token = req.cookies.access_token // our cookie is named access_token 

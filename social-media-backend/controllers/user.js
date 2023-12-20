@@ -1,8 +1,11 @@
-import { createError } from "../error.js"
-import User from "../models/User.js"
-import Post from "../models/Post.js"
+var error = require("../error.js");
+var User = require("../models/User.js");
+var Post = require("../models/Post.js");
 
-export const updateUser = async (req, res, next) => {
+var createError = error.createError;
+
+
+module.exports.updateUser = async (req, res, next) => {
     if(req.params.id === req.user._id){
         try{
             const updatedUser = await User.findByIdAndUpdate(
@@ -19,7 +22,7 @@ export const updateUser = async (req, res, next) => {
         return next(createError(403, "You can only update your account"))
     }
 }
-export const deleteUser = async (req, res, next) => {
+module.exports.deleteUser = async (req, res, next) => {
     if(req.params.id === req.user._id){
         try{
             {
@@ -34,7 +37,7 @@ export const deleteUser = async (req, res, next) => {
     }
     
 }
-export const findUser = async (req, res, next) => {
+module.exports.findUser = async (req, res, next) => {
     try{
         const foundUser = await User.findById(req.params.id)
         res.status(200).json(foundUser)
@@ -42,7 +45,7 @@ export const findUser = async (req, res, next) => {
         next(err)
     }
 }
-export const getLikedPost = async (req, res, next) => {
+module.exports.getLikedPost = async (req, res, next) => {
     try{
         const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your liked Posts"))
@@ -55,7 +58,7 @@ export const getLikedPost = async (req, res, next) => {
         next(err)
     }
 }
-export const getMyPosts = async (req, res, next) => {
+module.exports.getMyPosts = async (req, res, next) => {
     try{
         const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your Posts"))
@@ -68,7 +71,7 @@ export const getMyPosts = async (req, res, next) => {
         next(err)
     }
 }
-export const getBookmarkedPost = async (req, res, next) => {
+module.exports.getBookmarkedPost = async (req, res, next) => {
     try{
         const user = await User.findById(req.user._id)
         if(!user) next(createError(401, "Login to see your bookmarked Posts"))

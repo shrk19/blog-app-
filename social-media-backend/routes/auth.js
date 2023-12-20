@@ -1,12 +1,12 @@
-import express from 'express'
-import { signup, signin, logout, refetch } from '../controllers/auth.js'
-import { verifyToken } from '../verifyToken.js';
+var express = require('express');
+var authControllers = require('../controllers/auth.js');
+var verifyToken = require('../verifyToken.js').verifyToken;
 
-const router = express.Router();
+var router = express.Router();
 
-router.post('/signup', signup)
-router.post('/signin', signin)
-router.get('/logout', logout)
-router.get('/refetch', verifyToken, refetch)
+router.post('/signup', authControllers.signup);
+router.post('/signin', authControllers.signin);
+router.get('/logout', authControllers.logout);
+router.get('/refetch', verifyToken, authControllers.refetch);
 
-export default router;
+module.exports = router;

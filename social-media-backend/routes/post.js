@@ -1,26 +1,15 @@
-import express from 'express'
-import { addPost, editPost, deletePost, getPost, bookmarkPost, likePost, getAllPosts } from '../controllers/post.js'
-import { verifyToken } from '../verifyToken.js';
+var express = require('express');
+var postControllers = require('../controllers/post.js');
+var verifyToken = require('../verifyToken.js').verifyToken;
 
+var router = express.Router();
 
-const router = express.Router();
+router.post("/create", verifyToken, postControllers.addPost);
+router.put("/:id", verifyToken, postControllers.editPost);
+router.delete("/:id", verifyToken, postControllers.deletePost);
+router.get("/:id", postControllers.getPost);
+router.get("/", postControllers.getAllPosts);
+router.put("/bookmark/:id", verifyToken, postControllers.bookmarkPost);
+router.put("/like/:id", verifyToken, postControllers.likePost);
 
-// create a post 
-router.post("/create", verifyToken, addPost)
-// edit/update post 
-router.put("/:id", verifyToken, editPost)
-// delete post 
-router.delete("/:id", verifyToken, deletePost)
-// get a post
-router.get("/:id", getPost)
-// get all posts 
-router.get("/", getAllPosts)
-
-// bookmarks 
-router.put("/bookmark/:id", verifyToken, bookmarkPost)
-
-// like post 
-router.put("/like/:id", verifyToken, likePost)
-
-
-export default router;
+module.exports = router;

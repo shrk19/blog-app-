@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+var mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -20,4 +20,4 @@ const UserSchema = new mongoose.Schema({
     bookmarkedPosts: [ {type: mongoose.Schema.Types.ObjectId, ref: "Post"} ]
 }, {timestamps: true})
 
-export default mongoose.model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema);
