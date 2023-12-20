@@ -39,9 +39,12 @@ app.use((err, req, res, next) => {
     })
 })
 
-app.listen('https://blog-app-api-rose.vercel.app', ()=>{
-    connectDB();
-    console.log("server running");
-})
+connectDB();
+// app.listen('https://blog-app-api-rose.vercel.app', ()=>{
+//     connectDB();
+//     console.log("server running");
+// })
+
+module.exports = app;
 
 
