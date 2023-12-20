@@ -9,7 +9,7 @@ import authRoutes from './routes/auth.js'
 import cors from 'cors'
 
 const app = express()
-app.use(cors({origin:"https://blog-app-client-inky.vercel.app/", credentials:true}))
+app.use(cors({origin:"https://blog-app-client-inky.vercel.app", credentials:true}))
 dotenv.config() 
 app.use(express.json()) // for the app to parse json files 
 app.use(cookieParser())
