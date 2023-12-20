@@ -27,6 +27,8 @@ const connectDB = async () => {
 
 connectDB();
 
+app.get("/",(req,res)=>{res.status(200).json("Server Running")})
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
@@ -48,5 +50,6 @@ app.listen(PORT, () => {
   connectDB();
   console.log("server running");
 });
+
 
 
