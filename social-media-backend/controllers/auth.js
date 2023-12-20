@@ -28,7 +28,6 @@ module.exports.signin = async (req, res, next) => {
         const isCorrect = user.password === req.body.password
         if(!isCorrect) return next(createError(404, "Incorrect Password"))
 
-        setCookie(access_token, value, [options])
         const token = jwt.sign({_id:user._id, username: user.username, email:user.email, createdPosts:user.createdPosts, likedPosts: user.likedPosts, bookmarkedPosts: user.bookmarkedPosts}, process.env.JWT, {expiresIn:"259200000"})
         setCookie('access_token', token, {
             httpOnly: true,
