@@ -2,10 +2,8 @@ var mongoose = require("mongoose");
 var jwt = require('jsonwebtoken');
 var User = require("../models/User.js");
 var error = require("../error.js");
-var { useCookies } = require("react-cookie") 
 
 var createError = error.createError;
-const [cookies, setCookie] = useCookies(["access_token"])
 
 module.exports.signup = async (req, res, next) => {
     try{
@@ -28,10 +26,13 @@ module.exports.signin = async (req, res, next) => {
         const isCorrect = user.password === req.body.password
         if(!isCorrect) return next(createError(404, "Incorrect Password"))
 
+        
         const token = jwt.sign({_id:user._id, username: user.username, email:user.email, createdPosts:user.createdPosts, likedPosts: user.likedPosts, bookmarkedPosts: user.bookmarkedPosts}, process.env.JWT, {expiresIn:"259200000"})
-        setCookie('access_token', token, {
-            httpOnly: true,
-            withCredentials: true,
+        console.log("first")
+    
+        res.cookie("access_token", token, {
+            httpOnly: true, 
+            withCredentials: true
         }).status(200).json(user)
         // access token is a hashed token which includes our user id, we will use it to identify our user 
 

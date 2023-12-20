@@ -4,6 +4,7 @@ import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../_root/context/UserContext';
 import { URL } from '../../url'
+import { useCookies } from 'react-cookie'
 
 
 type FieldType = {
@@ -15,15 +16,21 @@ type FieldType = {
 const SignInForm = () => {
 
   const {setUser} = useContext(UserContext)
-  
+  const [ cookies, setCookies] = useCookies(["access_token"])
   const [error, setError] = useState(false)
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
     console.log('Success:', values);
+    
     try{
-      const response = await axios.post(URL + '/api/auth/signin', values, {"withCredentials" : true} );
+      const response = await axios.post(URL + '/api/auth/signin', values );
       console.log(response.data) // comment 
+      console.log("first")
+      setCookies("access_token", response.data._id)
+      setCookies("access_token", response.data.username)
+      
+      
       //
       setUser(response.data)
       
