@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import { UserContext } from "../context/UserContext";
+import { URL } from "../../url";
 
 const MyPosts = () => {
 
@@ -13,7 +14,7 @@ const MyPosts = () => {
     useEffect(() => {
       const fetchPosts = async () => {
         try {
-          const res = await axios.get("http://localhost:5000/api/users/myposts", {"withCredentials" : true});
+          const res = await axios.get(URL+"/api/users/myposts", {"withCredentials" : true});
           //console.log(res.data);  // comment 
           setPosts(res.data)
         } catch (error) {

@@ -4,6 +4,7 @@ import { useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../context/UserContext"
 import { Card, Col, Row } from 'antd';
+import { URL } from "../../url"
 
 const Profile = () => {
   const {user, setUser} = useContext(UserContext)
@@ -11,7 +12,7 @@ const Profile = () => {
   
   const handleLogout = async () => {
     try{
-      const res = await axios.get("http://localhost:5000/api/auth/logout", {"withCredentials" : true})
+      const res = await axios.get(URL+"/api/auth/logout", {"withCredentials" : true})
       console.log(res.data)
       setUser(null)
       navigate("/signin")

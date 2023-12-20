@@ -6,6 +6,7 @@ import axios from "axios";
 import { Popconfirm, notification } from "antd";
 import { PostContext } from "../context/PostContext";
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import {URL} from '../../url'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -37,7 +38,7 @@ const PostCard = (props: {
     }
     const handleDelete = async (postId : String) => {
         try {
-          const res = await axios.delete(`http://localhost:5000/api/posts/${postId}`, {"withCredentials": true });
+          const res = await axios.delete(URL+`/api/posts/${postId}`, {"withCredentials": true });
           if(res.status === 200){
             msg = 'Post deleted successfully'
             openNotificationWithIcon('success')

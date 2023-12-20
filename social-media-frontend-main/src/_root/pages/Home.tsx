@@ -3,6 +3,7 @@ import PostCard from "../components/PostCard"
 import { UserContext } from "../context/UserContext";
 import { PostContext } from "../context/PostContext";
 import axios from "axios";
+import { URL } from "../../url";
 
 
 const Home = () => {
@@ -15,7 +16,7 @@ const Home = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/posts/"); 
+        const res = await axios.get(URL+"/api/posts/"); 
         //console.log(res.data) // comment
         setPosts(res.data)
       } catch (error) {

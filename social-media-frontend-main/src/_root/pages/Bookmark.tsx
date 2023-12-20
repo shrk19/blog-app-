@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import PostCard from "../components/PostCard";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import { URL } from "../../url";
 
 const Bookmark = () => {
   const {user} = useContext(UserContext)
@@ -11,7 +12,7 @@ const Bookmark = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/users/bookmarked", {"withCredentials" : true});
+        const res = await axios.get(URL+"/api/users/bookmarked", {"withCredentials" : true});
         //console.log(res.data);  // comment 
         setPosts(res.data)
       } catch (error) {

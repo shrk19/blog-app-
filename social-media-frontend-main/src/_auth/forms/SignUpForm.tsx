@@ -1,5 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
+import { URL } from '../../url';
 import axios from 'axios'
 
 
@@ -18,7 +19,7 @@ const SignUpForm = () => {
   const onFinish = async (values: any) => {
     console.log('Success:', values);
     try{
-      const response = await axios.post('http://localhost:5000/api/auth/signup', values);
+      const response = await axios.post(URL+'/api/auth/signup', values);
       console.log(response.data)
       navigate("/signin")
     }catch(err){

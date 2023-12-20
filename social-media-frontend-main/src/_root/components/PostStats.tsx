@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { notification } from 'antd';
 import { UserContext } from "../context/UserContext";
+import { URL } from "../../url";
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -30,13 +31,13 @@ const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSave
           openNotificationWithIcon('error')
           return
         }
-        const res = await axios.put(`http://localhost:5000/api/posts/like/${props._id}`, null, {"withCredentials" : true})
+        const res = await axios.put(URL+`/api/posts/like/${props._id}`, null, {"withCredentials" : true})
         if(res.status === 200){
           setLiked(!liked);
           setLikes(liked ? likes - 1 : likes + 1);
 
           // update user context
-          const updatedUser = await axios.get(`http://localhost:5000/api/users/find/${user._id}`)
+          const updatedUser = await axios.get(URL+`/api/users/find/${user._id}`)
           setUser(updatedUser.data)
         }
       }catch(err){
@@ -50,14 +51,14 @@ const PostStats = (props: { likes: number; _id: string, isLiked: boolean, isSave
           openNotificationWithIcon('error')
           return
         }
-        const res = await axios.put(`http://localhost:5000/api/posts/bookmark/${props._id}`, null, {"withCredentials" : true})
+        const res = await axios.put(URL+`/api/posts/bookmark/${props._id}`, null, {"withCredentials" : true})
         if(res.status === 200){
           setSaved(!saved); // Toggle the saved state
           msg = !saved ? 'Post Bookmarked' : 'Post removed from bookmarks'
           openNotificationWithIcon('success')
 
           // update user context
-          const updatedUser = await axios.get(`http://localhost:5000/api/users/find/${user._id}`)
+          const updatedUser = await axios.get(URL+`/api/users/find/${user._id}`)
           setUser(updatedUser.data)
         }
       } catch (error) {
