@@ -45,6 +45,6 @@ connectDB();
 //     console.log("server running");
 // })
 
-module.exports = app;
+export default app;
 
 
