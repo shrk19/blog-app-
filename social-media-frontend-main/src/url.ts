@@ -1,1 +1,1 @@
-export const URL = 'https://blog-app-api-rose.vercel.app/'
+export const URL = 'https://blog-app-api-rose.vercel.app'
