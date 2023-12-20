@@ -1,50 +1,52 @@
-import express from 'express'
-import mongoose from 'mongoose';
-import dotenv from 'dotenv'
-import cookieParser from "cookie-parser";
-import userRoutes from './routes/user.js'
-import postRoutes from './routes/post.js'
-import commentRoutes from './routes/comment.js'
-import authRoutes from './routes/auth.js'
-import cors from 'cors'
+var express = require("express");
+var mongoose = require("mongoose");
+var dotenv = require("dotenv");
+var cookieParser = require("cookie-parser");
+var userRoutes = require("./routes/user");
+var postRoutes = require("./routes/post");
+var commentRoutes = require("./routes/comment");
+var authRoutes = require("./routes/auth");
+var cors = require("cors");
 
-const app = express()
-app.use(cors({origin:"https://blog-app-client-inky.vercel.app", credentials:true}))
-dotenv.config() 
-app.use(express.json()) // for the app to parse json files 
-app.use(cookieParser())
+dotenv.config();
 
-const connectDB = async ()=> {
-    try{
-        await mongoose.connect(process.env.MONGO_URL)
-        console.log("db connected")
-    }catch(err){
-        console.log(err)
-    }
-}
+const app = express();
+app.use(cors());
 
-app.use('/api/auth', authRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/posts', postRoutes)
-app.use('/api/comments', commentRoutes)
+app.use(express.json()); // for the app to parse json files
+app.use(cookieParser());
 
-// error handling middleware 
-app.use((err, req, res, next) => {
-    const status = err.status || 500; 
-    const message = err.message || "Something went wrong";
-    return res.status(status).json({
-        success : false, 
-        status, 
-        message
-    })
-})
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("db connected");
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 connectDB();
-// app.listen('https://blog-app-api-rose.vercel.app', ()=>{
-//     connectDB();
-//     console.log("server running");
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
+
+// error handling middleware
+// app.use((err, req, res, next) => {
+//     const status = err.status || 500;
+//     const message = err.message || "Something went wrong";
+//     return res.status(status).json({
+//         success : false,
+//         status,
+//         message
+//     })
 // })
 
+const port = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  connectDB();
+  console.log("server running");
+});
+
 export default app;
-
-
